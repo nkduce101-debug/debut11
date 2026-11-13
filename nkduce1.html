@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>나만의 데뷔조 만들기</title>
+<!-- 화면 캡처 및 이미지 저장을 위한 라이브러리 -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<style>
+  /* 모바일 화면 넘어감 방지 (Box-sizing 적용) */
+  * { box-sizing: border-box; }
+  
+  body { font-family: 'Pretendard', -apple-system, sans-serif; text-align: center; background-color: #fff3e0; margin: 0; padding: 10px; }
+  h1 { color: #e65100; display: flex; align-items: center; justify-content: center; font-size: 1.5em; margin: 10px 0; }
+  
+  /* 귤 단면 일러스트 크기 및 위치 조정 */
+  .tangerine-icon { width: 28px; height: 28px; margin: 0 6px; }
+
+  .container { width: 100%; max-width: 800px; margin: 0 auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  
+  /* 101명 그리드 설정 (모바일 최적화) */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 8px; margin-top: 15px; max-height: 50vh; overflow-y: auto; padding: 5px; border: 1px solid #ddd; border-radius: 10px; }
+  .trainee { width: 100%; aspect-ratio: 1; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: 0.2s; object-fit: cover; background: #f5f5f5; }
+  .trainee:hover { transform: scale(1.05); }
+  .trainee.selected { border-color: #ff9800; transform: scale(1.1); background: #fff8e1; }
+  
+  /* 카운터 및 버튼 */
+  .status { margin: 15px 0; font-size: 1.1em; font-weight: bold; color: #333; }
+  .btn { padding: 10px 16px; font-size: 1em; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; margin: 5px; width: 100%; max-width: 300px; }
+  .btn-submit { background-color: #e0e0e0; color: #9e9e9e; pointer-events: none; }
+  .btn-submit.active { background-color: #ff9800; color: white; pointer-events: auto; }
+  .btn-submit.active:hover { background-color: #f57c00; }
+  
+  /* 결과 화면 */
+  #result-area { display: none; }
+  .pyramid { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 20px 5px; background: #fff8e1; border-radius: 15px; width: 100%; }
+  .row { display: flex; justify-content: center; gap: 8px; width: 100%; }
+  .row-wrap { display: flex; flex-direction: column; align-items: center; }
+  
+  /* 모바일 화면을 위해 이미지 크기를 반응형으로 수정 */
+  .row img { width: 16vw; max-width: 70px; height: 16vw; max-height: 70px; border-radius: 50%; border: 3px solid #ffb74d; object-fit: cover; background: white; }
+  .center-label { text-align: center; font-weight: bold; color: #e65100; margin-top: 5px; font-size: 0.8em; }
+  
+  /* 공유 및 액션 버튼 래퍼 (모바일에서 세로 정렬) */
+  .action-buttons { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px; }
+  .btn-save { background-color: #4CAF50; color: white; }
+  .btn-twitter { background-color: #000000; color: white; } 
+</style>
+</head>
+<body>
+
+<!-- 귤 단면 일러스트 SVG -->
+<svg style="display: none;">
+  <symbol id="tangerine-svg" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="45" fill="#FF9800" />
+    <circle cx="50" cy="50" r="40" fill="#FFF3E0" />
+    <path d="M50 50 L50 13 A37 37 0 0 1 85 36 Z" fill="#FFB74D" stroke="#FFF3E0" stroke-width="2" />
+    <path d="M50 50 L85 36 A37 37 0 0 1 85 64 Z" fill="#FFB74D" stroke="#FFF3E0" stroke-width="2" />
+    <path d="M50 50 L85 64 A37 37 0 0 1 50 87 Z" fill="#FFB74D" stroke="#FFF3E0" stroke-width="2" />
+    <path d="M50 50 L50 87 A37 37 0 0 1 15 64 Z" fill="#FFB74D" stroke="#FFF3E0" stroke-width="2" />
+    <path d="M50 50 L15 64 A37 37 0 0 1 15 36 Z" fill="#FFB74D" stroke="#FFF3E0" stroke-width="2" />
+    <path d="M50 50 L15 36 A37 37 0 0 1 50 13 Z" fill="#FFB74D" stroke="#FFF3E0" stroke-width="2" />
+    <circle cx="50" cy="50" r="5" fill="#FFF3E0" />
+  </symbol>
+</svg>
+
+<!-- 1단계: 선택 화면 -->
+<div class="container" id="main-container">
+  <h1>
+    <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
+    나만의 데뷔조 만들기
+    <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
+  </h1>
+  <p style="font-size: 0.9em; color: #555;">101명의 연습생 중 당신의 마음을 훔친 11명을 선택하세요!</p>
+  
+  <div class="status">선택: <span id="count" style="color: #ff9800;">0</span> / 11</div>
+  <button id="submit-btn" class="btn btn-submit">11명 선택 필요</button>
+  
+  <div class="grid" id="trainee-grid"></div>
+</div>
+
+<!-- 2단계: 결과 화면 -->
+<div class="container" id="result-area">
+  <h1>
+    <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
+    나만의 픽! 탑 11
+    <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
+  </h1>
+  <div class="pyramid" id="capture-area">
+    <h2 style="color: #e65100; margin: 0 0 15px 0; font-size: 1.3em;">MY DEBUT GROUP</h2>
+    <div class="row" id="row1"></div> <!-- 1명 (센터) -->
+    <div class="row" id="row2"></div> <!-- 3명 -->
+    <div class="row" id="row3"></div> <!-- 3명 -->
+    <div class="row" id="row4"></div> <!-- 4명 -->
+  </div>
+  
+  <div class="action-buttons">
+    <button class="btn btn-save" onclick="saveImage()">⬇️ 이미지로 저장</button>
+    <button class="btn btn-twitter" onclick="shareTwitter()">𝕏 트위터 공유</button>
+    <button class="btn" style="background:#ddd; color:#333;" onclick="location.reload()">🔄 다시 하기</button>
+  </div>
+</div>
+
+<script>
+  const grid = document.getElementById('trainee-grid');
+  const countDisplay = document.getElementById('count');
+  const submitBtn = document.getElementById('submit-btn');
+  const mainContainer = document.getElementById('main-container');
+  const resultArea = document.getElementById('result-area');
+  let selected = [];
+
+  // 실제 사진 적용 시 아래 img.src 부분을 교체해 주세요.
+  for (let i = 1; i <= 101; i++) {
+    const img = document.createElement('img');
+    img.src = `https://api.dicebear.com/7.x/notionists/svg?seed=Trainee${i}&backgroundColor=transparent`;
+    img.className = 'trainee';
+    img.dataset.id = i;
+    img.onclick = () => toggleSelection(img);
+    grid.appendChild(img);
+  }
+
+  function toggleSelection(img) {
+    const id = img.dataset.id;
+    const index = selected.findIndex(item => item.id === id);
+
+    if (index > -1) {
+      selected.splice(index, 1);
+      img.classList.remove('selected');
+    } else {
+      if (selected.length >= 11) {
+        alert('이미 11명을 모두 선택했습니다!');
+        return;
+      }
+      selected.push({ id, src: img.src });
+      img.classList.add('selected');
+    }
+    updateStatus();
+  }
+
+  function updateStatus() {
+    countDisplay.innerText = selected.length;
+    if (selected.length === 11) {
+      submitBtn.classList.add('active');
+      submitBtn.innerText = "결과 보기!";
+    } else {
+      submitBtn.classList.remove('active');
+      submitBtn.innerText = `${11 - selected.length}명 더 선택 필요`;
+    }
+  }
+
+  submitBtn.onclick = () => {
+    if (selected.length !== 11) return;
+    
+    mainContainer.style.display = 'none';
+    resultArea.style.display = 'block';
+
+    const layouts = [1, 3, 3, 4];
+    let currentIndex = 0;
+
+    layouts.forEach((count, rowIndex) => {
+      const row = document.getElementById(`row${rowIndex + 1}`);
+      for (let i = 0; i < count; i++) {
+        if(currentIndex >= 11) break;
+        
+        const wrap = document.createElement('div');
+        wrap.className = 'row-wrap';
+        
+        const img = document.createElement('img');
+        img.src = selected[currentIndex].src;
+        wrap.appendChild(img);
+        
+        if(rowIndex === 0) {
+          const label = document.createElement('div');
+          label.className = 'center-label';
+          label.innerText = '👑 CENTER';
+          wrap.appendChild(label);
+        }
+        
+        row.appendChild(wrap);
+        currentIndex++;
+      }
+    });
+  };
+
+  function saveImage() {
+    const captureArea = document.getElementById('capture-area');
+    // 모바일 캡처 화질 향상을 위해 scale: 3 적용
+    html2canvas(captureArea, { backgroundColor: '#fff8e1', scale: 3 }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'my_top11_debut_group.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  }
+
+  function shareTwitter() {
+    const text = encodeURIComponent("🍊 나만의 데뷔조 11명을 완성했습니다! 🍊 여러분의 픽은 누구인가요?\n#나만의데뷔조 #TOP11");
+    const url = encodeURIComponent(window.location.href); 
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+  }
+</script>
+</body>
+</html>
