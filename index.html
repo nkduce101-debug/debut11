@@ -44,12 +44,19 @@
   .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
   .row-wrap { display: flex; flex-direction: column; align-items: center; width: 21vw; max-width: 85px; }
   
-  /* 모바일 화면을 위해 결과 이미지 및 이름 크기 반응형 조정 */
+  /* 결과 이미지 기본 크기 */
   .row img { width: 16vw; max-width: 70px; height: 16vw; max-height: 70px; border-radius: 50%; border: 3px solid #ffb74d; object-fit: cover; background: white; }
-  .result-name { font-size: 11px; font-weight: bold; color: #333; margin-top: 4px; word-break: keep-all; line-height: 1.2; }
-  .center-label { text-align: center; font-weight: bold; color: #e65100; margin-top: 2px; font-size: 0.75em; }
   
-  /* 공유 및 액션 버튼 래퍼 (모바일에서 세로 정렬) */
+  /* 센터 전용 이미지 크기 1.5배 확대 */
+  .row img.center-img { width: 24vw; max-width: 105px; height: 24vw; max-height: 105px; border-width: 4px; }
+  
+  .result-name { font-size: 11px; font-weight: bold; color: #333; margin-top: 4px; word-break: keep-all; line-height: 1.2; }
+  .row-wrap.center-wrap .result-name { font-size: 13px; color: #e65100; margin-top: 6px; } /* 센터 이름도 조금 더 크게 */
+  
+  /* 사진 위 CENTER 라벨 스타일 */
+  .center-label { text-align: center; font-weight: bold; color: #e65100; margin-bottom: 5px; font-size: 0.9em; white-space: nowrap; }
+  
+  /* 공유 및 액션 버튼 래퍼 */
   .action-buttons { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px; }
   .btn-save { background-color: #4CAF50; color: white; }
   .btn-twitter { background-color: #000000; color: white; } 
@@ -79,7 +86,7 @@
     나만의 데뷔조 만들기
     <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
   </h1>
-  <p style="font-size: 0.9em; color: #555;">101명의 연습생 중 당신의 마음을 훔친 11명을 선택하세요!</p>
+  <p style="font-size: 0.9em; color: #555;">101명의 후보 중 당신의 마음을 훔친 11명을 선택하세요!</p>
   
   <div class="status">선택: <span id="count" style="color: #ff9800;">0</span> / 11</div>
   <button id="submit-btn" class="btn btn-submit">11명 선택 필요</button>
@@ -112,17 +119,17 @@
 <script>
   // ★ 아래 101개의 이름을 실제 이름으로 순서대로 수정해 주세요 ★
   const traineeNames = [
-    "후보 1", "2.후보 2", "후보 3", "연습생 4", "연습생 5", "연습생 6", "연습생 7", "연습생 8", "연습생 9", "연습생 10",
-    "연습생 11", "연습생 12", "연습생 13", "연습생 14", "연습생 15", "연습생 16", "연습생 17", "연습생 18", "연습생 19", "연습생 20",
-    "연습생 21", "연습생 22", "연습생 23", "연습생 24", "연습생 25", "연습생 26", "연습생 27", "연습생 28", "연습생 29", "연습생 30",
-    "연습생 31", "연습생 32", "연습생 33", "연습생 34", "연습생 35", "연습생 36", "연습생 37", "연습생 38", "연습생 39", "연습생 40",
-    "연습생 41", "연습생 42", "연습생 43", "연습생 44", "연습생 45", "연습생 46", "연습생 47", "연습생 48", "연습생 49", "연습생 50",
-    "연습생 51", "연습생 52", "연습생 53", "연습생 54", "연습생 55", "연습생 56", "연습생 57", "연습생 58", "연습생 59", "연습생 60",
-    "연습생 61", "연습생 62", "연습생 63", "연습생 64", "연습생 65", "연습생 66", "연습생 67", "연습생 68", "연습생 69", "연습생 70",
-    "연습생 71", "연습생 72", "연습생 73", "연습생 74", "연습생 75", "연습생 76", "연습생 77", "연습생 78", "연습생 79", "연습생 80",
-    "연습생 81", "연습생 82", "연습생 83", "연습생 84", "연습생 85", "연습생 86", "연습생 87", "연습생 88", "연습생 89", "연습생 90",
-    "연습생 91", "연습생 92", "연습생 93", "연습생 94", "연습생 95", "연습생 96", "연습생 97", "연습생 98", "연습생 99", "연습생 100",
-    "연습생 101"
+    "후보 1", "후보 2", "후보 3", "후보 4", "후보 5", "후보 6", "후보 7", "후보 8", "후보 9", "후보 10",
+    "후보 11", "후보 12", "후보 13", "후보 14", "후보 15", "후보 16", "후보 17", "후보 18", "후보 19", "후보 20",
+    "후보 21", "후보 22", "후보 23", "후보 24", "후보 25", "후보 26", "후보 27", "후보 28", "후보 29", "후보 30",
+    "후보 31", "후보 32", "후보 33", "후보 34", "후보 35", "후보 36", "후보 37", "후보 38", "후보 39", "후보 40",
+    "후보 41", "후보 42", "후보 43", "후보 44", "후보 45", "후보 46", "후보 47", "후보 48", "후보 49", "후보 50",
+    "후보 51", "후보 52", "후보 53", "후보 54", "후보 55", "후보 56", "후보 57", "후보 58", "후보 59", "후보 60",
+    "후보 61", "후보 62", "후보 63", "후보 64", "후보 65", "후보 66", "후보 67", "후보 68", "후보 69", "후보 70",
+    "후보 71", "후보 72", "후보 73", "후보 74", "후보 75", "후보 76", "후보 77", "후보 78", "후보 79", "후보 80",
+    "후보 81", "후보 82", "후보 83", "후보 84", "후보 85", "후보 86", "후보 87", "후보 88", "후보 89", "후보 90",
+    "후보 91", "후보 92", "후보 93", "후보 94", "후보 95", "후보 96", "후보 97", "후보 98", "후보 99", "후보 100",
+    "후보 101"
   ];
 
   const grid = document.getElementById('trainee-grid');
@@ -133,7 +140,7 @@
   let selected = [];
 
   for (let i = 1; i <= 101; i++) {
-    const name = traineeNames[i - 1] || `연습생 ${i}`;
+    const name = traineeNames[i - 1] || `후보 ${i}`;
     
     const item = document.createElement('div');
     item.className = 'trainee-item';
@@ -203,22 +210,29 @@
         const person = selected[currentIndex];
         const wrap = document.createElement('div');
         wrap.className = 'row-wrap';
+
+        // 센터(첫 번째 줄) 전용 클래스 및 요소 추가
+        if (rowIndex === 0) {
+          wrap.style.width = 'auto';
+          wrap.classList.add('center-wrap');
+          const label = document.createElement('div');
+          label.className = 'center-label';
+          label.innerText = '👑 CENTER 👑';
+          wrap.appendChild(label);
+        }
         
         const img = document.createElement('img');
         img.src = person.src;
+        // 센터인 경우 사진에 center-img 클래스 추가하여 1.5배 확대
+        if (rowIndex === 0) {
+          img.classList.add('center-img');
+        }
         wrap.appendChild(img);
 
         const nameTag = document.createElement('div');
         nameTag.className = 'result-name';
         nameTag.innerText = person.name;
         wrap.appendChild(nameTag);
-        
-        if (rowIndex === 0) {
-          const label = document.createElement('div');
-          label.className = 'center-label';
-          label.innerText = '👑 CENTER';
-          wrap.appendChild(label);
-        }
         
         row.appendChild(wrap);
         currentIndex++;
