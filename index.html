@@ -19,20 +19,27 @@
   .container { width: 100%; max-width: 800px; margin: 0 auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
   
   /* 101명 그리드 설정 (모바일 최적화 및 이름 공간 확보) */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 10px 6px; margin-top: 15px; max-height: 52vh; overflow-y: auto; padding: 8px 5px; border: 1px solid #ddd; border-radius: 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 12px 6px; margin-top: 15px; max-height: 52vh; overflow-y: auto; padding: 10px 6px; border: 1px solid #ddd; border-radius: 10px; }
   
-  /* 사진 + 이름 묶음 카드 */
-  .trainee-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
-  .trainee-img { width: 100%; aspect-ratio: 1; border-radius: 50%; border: 3px solid transparent; transition: 0.2s; object-fit: cover; background: #f5f5f5; }
+  /* 사진 + 순위 뱃지 + 이름 묶음 카드 */
+  .trainee-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
+  .img-box { position: relative; width: 100%; aspect-ratio: 1; }
+  .trainee-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid transparent; transition: 0.2s; object-fit: cover; background: #f5f5f5; }
   .trainee-item:hover .trainee-img { transform: scale(1.05); }
-  .trainee-item.selected .trainee-img { border-color: #ff9800; transform: scale(1.08); background: #fff8e1; }
+  .trainee-item.selected .trainee-img { border-color: #ff9800; transform: scale(1.06); background: #fff8e1; }
   
-  /* 사진 아래 이름 스타일 */
+  /* 선택 시 사진 좌측 상단에 뜨는 순위 뱃지 */
+  .rank-badge { display: none; position: absolute; top: -4px; left: -4px; background-color: #e65100; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.25); z-index: 2; }
+  .trainee-item.selected .rank-badge { display: block; }
+  
+  /* 선택 화면 사진 아래 이름 스타일 */
   .trainee-name { font-size: 11px; color: #333; margin-top: 4px; font-weight: 500; word-break: keep-all; line-height: 1.2; }
   .trainee-item.selected .trainee-name { color: #e65100; font-weight: bold; }
   
-  /* 카운터 및 버튼 */
-  .status { margin: 15px 0; font-size: 1.1em; font-weight: bold; color: #333; }
+  /* 현재 순위 선택 상태 표시 */
+  .status { margin: 15px 0; font-size: 1.25em; font-weight: bold; color: #333; }
+  .status-sub { font-size: 0.75em; color: #777; font-weight: normal; margin-left: 4px; }
+  
   .btn { padding: 10px 16px; font-size: 1em; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; margin: 5px; width: 100%; max-width: 300px; }
   .btn-submit { background-color: #e0e0e0; color: #9e9e9e; pointer-events: none; }
   .btn-submit.active { background-color: #ff9800; color: white; pointer-events: auto; }
@@ -40,18 +47,19 @@
   
   /* 결과 화면 */
   #result-area { display: none; }
-  .pyramid { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px 5px; background: #fff8e1; border-radius: 15px; width: 100%; }
+  .pyramid { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 20px 5px; background: #fff8e1; border-radius: 15px; width: 100%; }
   .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
   .row-wrap { display: flex; flex-direction: column; align-items: center; width: 21vw; max-width: 85px; }
   
   /* 결과 이미지 기본 크기 */
   .row img { width: 16vw; max-width: 70px; height: 16vw; max-height: 70px; border-radius: 50%; border: 3px solid #ffb74d; object-fit: cover; background: white; }
   
-  /* 센터 전용 이미지 크기 1.5배 확대 */
-  .row img.center-img { width: 24vw; max-width: 105px; height: 24vw; max-height: 105px; border-width: 4px; }
+  /* 센터(1위) 전용 이미지 크기 1.5배 확대 */
+  .row img.center-img { width: 24vw; max-width: 105px; height: 24vw; max-height: 105px; border-width: 4px; border-color: #ff9800; }
   
-  .result-name { font-size: 11px; font-weight: bold; color: #333; margin-top: 4px; word-break: keep-all; line-height: 1.2; }
-  .row-wrap.center-wrap .result-name { font-size: 13px; color: #e65100; margin-top: 6px; } /* 센터 이름도 조금 더 크게 */
+  /* 결과 화면 사진 아래 순위 표시 */
+  .result-rank { font-size: 11px; font-weight: bold; color: white; background-color: #ff9800; padding: 2px 8px; border-radius: 10px; margin-top: 6px; }
+  .result-rank.center-rank { font-size: 13px; background-color: #e65100; padding: 2px 10px; border-radius: 12px; }
   
   /* 사진 위 CENTER 라벨 스타일 */
   .center-label { text-align: center; font-weight: bold; color: #e65100; margin-bottom: 5px; font-size: 0.9em; white-space: nowrap; }
@@ -86,9 +94,12 @@
     나만의 데뷔조 만들기
     <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
   </h1>
-  <p style="font-size: 0.9em; color: #555;">101명의 후보 중 당신의 마음을 훔친 11명을 선택하세요!</p>
+  <p style="font-size: 0.9em; color: #555;">1위부터 11위까지 순서대로 원하는 후보를 선택하세요!</p>
   
-  <div class="status">선택: <span id="count" style="color: #ff9800;">0</span> / 11</div>
+  <div class="status" id="status-display">
+    <span style="color: #e65100;">1위 선택</span>
+    <span class="status-sub">(0 / 11)</span>
+  </div>
   <button id="submit-btn" class="btn btn-submit">11명 선택 필요</button>
   
   <div class="grid" id="trainee-grid"></div>
@@ -103,10 +114,10 @@
   </h1>
   <div class="pyramid" id="capture-area">
     <h2 style="color: #e65100; margin: 0 0 12px 0; font-size: 1.3em;">나만의 닏경</h2>
-    <div class="row" id="row1"></div> <!-- 1명 (센터) -->
-    <div class="row" id="row2"></div> <!-- 3명 -->
-    <div class="row" id="row3"></div> <!-- 3명 -->
-    <div class="row" id="row4"></div> <!-- 4명 -->
+    <div class="row" id="row1"></div> <!-- 1위 (센터) -->
+    <div class="row" id="row2"></div> <!-- 2위~4위 (3명) -->
+    <div class="row" id="row3"></div> <!-- 5위~7위 (3명) -->
+    <div class="row" id="row4"></div> <!-- 8위~11위 (4명) -->
   </div>
   
   <div class="action-buttons">
@@ -117,7 +128,7 @@
 </div>
 
 <script>
-  // ★ 아래 101개의 이름을 실제 이름으로 순서대로 수정해 주세요 ★
+  // 선택 화면에 표시될 후보 이름 목록
   const traineeNames = [
     "후보 1", "후보 2", "후보 3", "후보 4", "후보 5", "후보 6", "후보 7", "후보 8", "후보 9", "후보 10",
     "후보 11", "후보 12", "후보 13", "후보 14", "후보 15", "후보 16", "후보 17", "후보 18", "후보 19", "후보 20",
@@ -133,11 +144,13 @@
   ];
 
   const grid = document.getElementById('trainee-grid');
-  const countDisplay = document.getElementById('count');
+  const statusDisplay = document.getElementById('status-display');
   const submitBtn = document.getElementById('submit-btn');
   const mainContainer = document.getElementById('main-container');
   const resultArea = document.getElementById('result-area');
-  let selected = [];
+  
+  // 1위(인덱스 0) ~ 11위(인덱스 10) 저장 배열
+  let ranks = new Array(11).fill(null);
 
   for (let i = 1; i <= 101; i++) {
     const name = traineeNames[i - 1] || `후보 ${i}`;
@@ -147,16 +160,25 @@
     item.dataset.id = i;
     item.dataset.name = name;
 
+    const imgBox = document.createElement('div');
+    imgBox.className = 'img-box';
+
+    const badge = document.createElement('div');
+    badge.className = 'rank-badge';
+
     const img = document.createElement('img');
-    // ★ 실제 사진 적용 시 아래 img.src 부분을 교체해 주세요 (예: `./1 (${i}).jpg` 또는 `./${i}.jpg`) ★
+    // 실제 사진 파일명에 맞게 설정됨 (예: ./후보1.jpeg)
     img.src = `./nk${i}.jpeg`;
     img.className = 'trainee-img';
+
+    imgBox.appendChild(badge);
+    imgBox.appendChild(img);
 
     const label = document.createElement('div');
     label.className = 'trainee-name';
     label.innerText = name;
 
-    item.appendChild(img);
+    item.appendChild(imgBox);
     item.appendChild(label);
     item.onclick = () => toggleSelection(item);
     grid.appendChild(item);
@@ -166,35 +188,47 @@
     const id = item.dataset.id;
     const name = item.dataset.name;
     const src = item.querySelector('img').src;
-    const index = selected.findIndex(entry => entry.id === id);
+    const badge = item.querySelector('.rank-badge');
 
-    if (index > -1) {
-      selected.splice(index, 1);
+    // 이미 선택된 후보인지 확인
+    const existingRankIndex = ranks.findIndex(entry => entry && entry.id === id);
+
+    if (existingRankIndex > -1) {
+      // 선택 해제 시 해당 순위 비우기
+      ranks[existingRankIndex] = null;
       item.classList.remove('selected');
+      badge.innerText = '';
     } else {
-      if (selected.length >= 11) {
-        alert('이미 11명을 모두 선택했습니다!');
+      // 비어있는 가장 높은 순위(1위 -> 11위 순) 찾기
+      const emptyRankIndex = ranks.findIndex(entry => entry === null);
+      if (emptyRankIndex === -1) {
+        alert('1위부터 11위까지 이미 모두 선택했습니다!');
         return;
       }
-      selected.push({ id, name, src });
+      ranks[emptyRankIndex] = { id, name, src };
       item.classList.add('selected');
+      badge.innerText = `${emptyRankIndex + 1}위`;
     }
     updateStatus();
   }
 
   function updateStatus() {
-    countDisplay.innerText = selected.length;
-    if (selected.length === 11) {
+    const selectedCount = ranks.filter(entry => entry !== null).length;
+    const nextRankIndex = ranks.findIndex(entry => entry === null);
+
+    if (nextRankIndex === -1) {
+      statusDisplay.innerHTML = `<span style="color: #ff9800;">✨ 1위~11위 선택 완료! ✨</span>`;
       submitBtn.classList.add('active');
       submitBtn.innerText = "결과 보기!";
     } else {
+      statusDisplay.innerHTML = `<span style="color: #e65100;">${nextRankIndex + 1}위 선택</span> <span class="status-sub">(${selectedCount} / 11)</span>`;
       submitBtn.classList.remove('active');
-      submitBtn.innerText = `${11 - selected.length}명 더 선택 필요`;
+      submitBtn.innerText = `${11 - selectedCount}명 더 선택 필요`;
     }
   }
 
   submitBtn.onclick = () => {
-    if (selected.length !== 11) return;
+    if (ranks.includes(null)) return;
     
     mainContainer.style.display = 'none';
     resultArea.style.display = 'block';
@@ -207,14 +241,14 @@
       for (let i = 0; i < count; i++) {
         if (currentIndex >= 11) break;
         
-        const person = selected[currentIndex];
+        const person = ranks[currentIndex];
+        const rankNumber = currentIndex + 1;
         const wrap = document.createElement('div');
         wrap.className = 'row-wrap';
 
-        // 센터(첫 번째 줄) 전용 클래스 및 요소 추가
-        if (rowIndex === 0) {
+        // 1위(센터) 사진 위 라벨 추가
+        if (rankNumber === 1) {
           wrap.style.width = 'auto';
-          wrap.classList.add('center-wrap');
           const label = document.createElement('div');
           label.className = 'center-label';
           label.innerText = '👑 CENTER 👑';
@@ -223,16 +257,16 @@
         
         const img = document.createElement('img');
         img.src = person.src;
-        // 센터인 경우 사진에 center-img 클래스 추가하여 1.5배 확대
-        if (rowIndex === 0) {
+        if (rankNumber === 1) {
           img.classList.add('center-img');
         }
         wrap.appendChild(img);
 
-        const nameTag = document.createElement('div');
-        nameTag.className = 'result-name';
-        nameTag.innerText = person.name;
-        wrap.appendChild(nameTag);
+        // 모든 사진 아래에 순위(1위 ~ 11위)만 표시
+        const rankTag = document.createElement('div');
+        rankTag.className = rankNumber === 1 ? 'result-rank center-rank' : 'result-rank';
+        rankTag.innerText = `${rankNumber}위`;
+        wrap.appendChild(rankTag);
         
         row.appendChild(wrap);
         currentIndex++;
