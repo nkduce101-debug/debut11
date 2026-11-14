@@ -109,7 +109,7 @@
 <div class="container" id="result-area">
   <h1>
     <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
-    나만의 픽! 탑 11
+    나만의 PICK! TOP 11
     <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
   </h1>
   <div class="pyramid" id="capture-area">
@@ -168,7 +168,7 @@
 
     const img = document.createElement('img');
     // 실제 사진 파일명에 맞게 설정됨 (예: ./후보1.jpeg)
-    img.src = `./nk${i}.jpeg`;
+    img.src = `./${i}.jpeg`;
     img.className = 'trainee-img';
 
     imgBox.appendChild(badge);
@@ -285,7 +285,7 @@
   }
 
   function shareTwitter() {
-    const text = encodeURIComponent("🍊 나만의 데뷔조 11명을 완성했습니다! 🍊 여러분의 픽은 누구인가요?\n#나만의데뷔조 #TOP11");
+    const text = encodeURIComponent("🍊 나만의 데뷔조를 완성했습니다! 🍊 여러분의 픽은 누구인가요?\n#나만의데뷔조 #TOP11");
     const url = encodeURIComponent(window.location.href); 
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   }
