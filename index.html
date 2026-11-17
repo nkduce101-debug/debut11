@@ -18,8 +18,8 @@
 
   .container { width: 100%; max-width: 800px; margin: 0 auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
   
-  /* 101명 그리드 설정 (모바일 최적화 및 이름 공간 확보) */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 12px 6px; margin-top: 15px; max-height: 52vh; overflow-y: auto; padding: 10px 6px; border: 1px solid #ddd; border-radius: 10px; }
+  /* 101명 그리드 설정 (2줄 이름 공간 및 상하 간격 조정) */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 16px 6px; margin-top: 15px; max-height: 52vh; overflow-y: auto; padding: 12px 6px; border: 1px solid #ddd; border-radius: 10px; }
   
   /* 사진 + 순위 뱃지 + 이름 묶음 카드 */
   .trainee-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
@@ -32,8 +32,24 @@
   .rank-badge { display: none; position: absolute; top: -4px; left: -4px; background-color: #e65100; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.25); z-index: 2; }
   .trainee-item.selected .rank-badge { display: block; }
   
-  /* 선택 화면 사진 아래 이름 스타일 */
-  .trainee-name { font-size: 11px; color: #333; margin-top: 4px; font-weight: 500; word-break: keep-all; line-height: 1.2; }
+  /* 선택 화면 사진 아래 이름 스타일 (가운데 정렬, 최대 2줄 고정 높이) */
+  .trainee-name {
+    width: 100%;
+    font-size: 11px;
+    color: #333;
+    margin-top: 5px;
+    font-weight: 500;
+    text-align: center;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-height: 1.25;
+    height: 2.5em;
+    max-height: 2.5em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
   .trainee-item.selected .trainee-name { color: #e65100; font-weight: bold; }
   
   /* 현재 순위 선택 상태 표시 */
@@ -45,21 +61,41 @@
   .btn-submit.active { background-color: #ff9800; color: white; pointer-events: auto; }
   .btn-submit.active:hover { background-color: #f57c00; }
   
-  /* 결과 화면 */
+  /* 결과 화면 (1/2/3/5 배열 및 2줄 이름 상하 간격 조정) */
   #result-area { display: none; }
-  .pyramid { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 20px 5px; background: #fff8e1; border-radius: 15px; width: 100%; }
-  .row { display: flex; justify-content: center; gap: 6px; width: 100%; }
-  .row-wrap { display: flex; flex-direction: column; align-items: center; width: 21vw; max-width: 85px; }
+  .pyramid { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 22px 6px; background: #fff8e1; border-radius: 15px; width: 100%; }
+  .row { display: flex; justify-content: center; align-items: flex-start; gap: 4px; width: 100%; }
+  .row-wrap { display: flex; flex-direction: column; align-items: center; width: 18.5%; max-width: 84px; }
   
   /* 결과 이미지 기본 크기 */
-  .row img { width: 16vw; max-width: 70px; height: 16vw; max-height: 70px; border-radius: 50%; border: 3px solid #ffb74d; object-fit: cover; background: white; }
+  .row img { width: 14.5vw; max-width: 66px; height: 14.5vw; max-height: 66px; border-radius: 50%; border: 3px solid #ffb74d; object-fit: cover; background: white; }
   
-  /* 센터(1위) 전용 이미지 크기 1.5배 확대 */
-  .row img.center-img { width: 24vw; max-width: 105px; height: 24vw; max-height: 105px; border-width: 4px; border-color: #ff9800; }
+  /* 센터(1위) 전용 이미지 크기 약 1.5배 확대 */
+  .row img.center-img { width: 22vw; max-width: 100px; height: 22vw; max-height: 100px; border-width: 4px; border-color: #ff9800; }
   
   /* 결과 화면 사진 아래 순위 표시 */
-  .result-rank { font-size: 11px; font-weight: bold; color: white; background-color: #ff9800; padding: 2px 8px; border-radius: 10px; margin-top: 6px; }
-  .result-rank.center-rank { font-size: 13px; background-color: #e65100; padding: 2px 10px; border-radius: 12px; }
+  .result-rank { font-size: 10px; font-weight: bold; color: white; background-color: #ff9800; padding: 2px 7px; border-radius: 10px; margin-top: 5px; white-space: nowrap; }
+  .result-rank.center-rank { font-size: 12.5px; background-color: #e65100; padding: 2px 10px; border-radius: 12px; }
+  
+  /* 결과 화면 후보 이름 스타일 (가운데 정렬, 최대 2줄) */
+  .result-name {
+    width: 100%;
+    font-size: 10.5px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 4px;
+    text-align: center;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-height: 1.25;
+    max-height: 2.5em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .row-wrap.center-wrap { width: auto; max-width: 140px; }
+  .row-wrap.center-wrap .result-name { font-size: 12.5px; color: #e65100; margin-top: 5px; }
   
   /* 사진 위 CENTER 라벨 스타일 */
   .center-label { text-align: center; font-weight: bold; color: #e65100; margin-bottom: 5px; font-size: 0.9em; white-space: nowrap; }
@@ -94,7 +130,7 @@
     나만의 데뷔조 만들기
     <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
   </h1>
-  <p style="font-size: 0.9em; color: #555;">1위부터 11위까지 순서대로 원하는 후보를 선택하세요!</p>
+  <p style="font-size: 0.9em; color: #555;">1위부터 11위까지 순서대로 원하는 닏경을 선택하세요!</p>
   
   <div class="status" id="status-display">
     <span style="color: #e65100;">1위 선택</span>
@@ -109,15 +145,15 @@
 <div class="container" id="result-area">
   <h1>
     <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
-    나만의 PICK! TOP 11
+    나만의 픽! 탑 11
     <svg class="tangerine-icon"><use href="#tangerine-svg"></use></svg>
   </h1>
   <div class="pyramid" id="capture-area">
-    <h2 style="color: #e65100; margin: 0 0 12px 0; font-size: 1.3em;">나만의 닏경</h2>
-    <div class="row" id="row1"></div> <!-- 1위 (센터) -->
-    <div class="row" id="row2"></div> <!-- 2위~4위 (3명) -->
-    <div class="row" id="row3"></div> <!-- 5위~7위 (3명) -->
-    <div class="row" id="row4"></div> <!-- 8위~11위 (4명) -->
+    <h2 style="color: #e65100; margin: 0 0 8px 0; font-size: 1.3em;">나만의 닏경</h2>
+    <div class="row" id="row1"></div> <!-- 1위 (1명, 센터) -->
+    <div class="row" id="row2"></div> <!-- 2위~3위 (2명) -->
+    <div class="row" id="row3"></div> <!-- 4위~6위 (3명) -->
+    <div class="row" id="row4"></div> <!-- 7위~11위 (5명) -->
   </div>
   
   <div class="action-buttons">
@@ -128,9 +164,9 @@
 </div>
 
 <script>
-  // 선택 화면에 표시될 후보 이름 목록
+  // ★ 아래 101개의 후보 이름을 순서대로 직접 수정해 주세요 ★
   const traineeNames = [
-    "후보 1", "후보 2", "후보 3", "후보 4", "후보 5", "후보 6", "후보 7", "후보 8", "후보 9", "후보 10",
+    "너나믿지?난믿어", "헤이헤이 양손결박", "후보 3", "후보 4", "후보 5", "후보 6", "후보 7", "후보 8", "후보 9", "후보 10",
     "후보 11", "후보 12", "후보 13", "후보 14", "후보 15", "후보 16", "후보 17", "후보 18", "후보 19", "후보 20",
     "후보 21", "후보 22", "후보 23", "후보 24", "후보 25", "후보 26", "후보 27", "후보 28", "후보 29", "후보 30",
     "후보 31", "후보 32", "후보 33", "후보 34", "후보 35", "후보 36", "후보 37", "후보 38", "후보 39", "후보 40",
@@ -233,7 +269,8 @@
     mainContainer.style.display = 'none';
     resultArea.style.display = 'block';
 
-    const layouts = [1, 3, 3, 4];
+    // 1 / 2 / 3 / 5 피라미드 배열 (총 11명)
+    const layouts = [1, 2, 3, 5];
     let currentIndex = 0;
 
     layouts.forEach((count, rowIndex) => {
@@ -248,7 +285,7 @@
 
         // 1위(센터) 사진 위 라벨 추가
         if (rankNumber === 1) {
-          wrap.style.width = 'auto';
+          wrap.classList.add('center-wrap');
           const label = document.createElement('div');
           label.className = 'center-label';
           label.innerText = '👑 CENTER 👑';
@@ -262,11 +299,17 @@
         }
         wrap.appendChild(img);
 
-        // 모든 사진 아래에 순위(1위 ~ 11위)만 표시
+        // 순위 뱃지 (1위 ~ 11위)
         const rankTag = document.createElement('div');
         rankTag.className = rankNumber === 1 ? 'result-rank center-rank' : 'result-rank';
         rankTag.innerText = `${rankNumber}위`;
         wrap.appendChild(rankTag);
+
+        // 후보 이름 (최대 2줄, 가운데 정렬)
+        const nameTag = document.createElement('div');
+        nameTag.className = 'result-name';
+        nameTag.innerText = person.name;
+        wrap.appendChild(nameTag);
         
         row.appendChild(wrap);
         currentIndex++;
@@ -285,7 +328,7 @@
   }
 
   function shareTwitter() {
-    const text = encodeURIComponent("🍊 나만의 데뷔조를 완성했습니다! 🍊 여러분의 픽은 누구인가요?\n#나만의데뷔조 #TOP11");
+    const text = encodeURIComponent("🍊 나만의 데뷔조 11명을 완성했습니다! 🍊 여러분의 픽은 누구인가요?\n#나만의데뷔조 #TOP11");
     const url = encodeURIComponent(window.location.href); 
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   }
