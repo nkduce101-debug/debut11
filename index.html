@@ -70,8 +70,8 @@
   /* 결과 이미지 기본 크기 */
   .row img { width: 14.5vw; max-width: 66px; height: 14.5vw; max-height: 66px; border-radius: 50%; border: 3px solid #ffb74d; object-fit: cover; background: white; }
   
-  /* 센터(1위) 전용 이미지 크기 약 1.5배 확대 */
-  .row img.center-img { width: 22vw; max-width: 100px; height: 22vw; max-height: 100px; border-width: 4px; border-color: #ff9800; }
+  /* 센터(1위) 전용 테두리 강조 (크기는 다른 순위와 동일) */
+  .row img.center-img { border-width: 4px; border-color: #e65100; }
   
   /* 결과 화면 사진 아래 순위 표시 */
   .result-rank { font-size: 10px; font-weight: bold; color: white; background-color: #ff9800; padding: 2px 7px; border-radius: 10px; margin-top: 5px; white-space: nowrap; }
@@ -203,7 +203,6 @@
     badge.className = 'rank-badge';
 
     const img = document.createElement('img');
-    // 실제 사진 파일명에 맞게 설정됨 (예: ./후보1.jpeg)
     img.src = `./${i}.jpeg`;
     img.className = 'trainee-img';
 
