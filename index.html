@@ -70,7 +70,7 @@
   /* 결과 이미지 기본 크기 */
   .row img { width: 14.5vw; max-width: 66px; height: 14.5vw; max-height: 66px; border-radius: 50%; border: 3px solid #ffb74d; object-fit: cover; background: white; }
   
-  /* 센터(1위) 전용 이미지 크기 약 1.5배 확대 */
+  /* 센터(1위) 전용 이미지 크기 약 1.5배 확대 (원래 디자인 복원) */
   .row img.center-img { width: 22vw; max-width: 100px; height: 22vw; max-height: 100px; border-width: 4px; border-color: #ff9800; }
   
   /* 결과 화면 사진 아래 순위 표시 */
@@ -203,7 +203,6 @@
     badge.className = 'rank-badge';
 
     const img = document.createElement('img');
-    // 실제 사진 파일명에 맞게 설정됨 (예: ./후보1.jpeg)
     img.src = `./${i}.jpeg`;
     img.className = 'trainee-img';
 
